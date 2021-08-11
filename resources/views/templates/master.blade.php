@@ -1,0 +1,5 @@
+@component('components/nav')
+
+@endcomponent
+
+
