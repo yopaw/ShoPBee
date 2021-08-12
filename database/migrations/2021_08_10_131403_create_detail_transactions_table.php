@@ -14,7 +14,7 @@ class CreateDetailTransactionsTable extends Migration
     public function up()
     {
         Schema::create('detail_transactions', function (Blueprint $table) {
-            $table->foreignId('header_transaction_id')->constrained('products');
+            $table->foreignId('header_transaction_id')->constrained('header_transactions');
             $table->foreignId('product_id')->constrained('products');
             $table->unsignedInteger('quantity');
             $table->softDeletes();

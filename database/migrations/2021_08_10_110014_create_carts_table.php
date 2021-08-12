@@ -18,6 +18,7 @@ class CreateCartsTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('seller_id')->constrained('sellers');
             $table->foreignId('product_id')->constrained('products');
+            $table->foreignId('voucher_id')->constrained('vouchers');
             $table->unsignedInteger('quantity');
             $table->timestamps();
         });

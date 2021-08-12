@@ -17,8 +17,8 @@ class CreateVouchersTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
-            $table->unsignedInteger('min_price');
-            $table->unsignedInteger('max_price');
+            $table->unsignedInteger('minimum_price');
+            $table->unsignedInteger('maximum_price');
             $table->unsignedInteger('discount');
             $table->unsignedInteger('stock');
             $table->softDeletes();

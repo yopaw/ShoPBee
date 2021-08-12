@@ -17,7 +17,7 @@ class CreateSellersTable extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('money');
-            $table->foreignId('users_id')->constrained('users');
+            $table->foreignId('user_id')->constrained('users');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -1,5 +1,0 @@
-@component('components/nav')
-
-@endcomponent
-
-
