@@ -18,13 +18,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             VoucherSeeder::class,
+            StatusSeeder::class,
             SellerSeeder::class,
             ProductTypeSeeder::class,
             ProductSeeder::class,
-            HeaderTransactionSeeder::class,
-            DetailTransactionSeeder::class,
-            CartSeeder::class,
-            ShopVoucherSeeder::class
+            SellerVoucherSeeder::class,
+            TransactionSeeder::class,
+            CartSeeder::class
         ]);
     }
 }

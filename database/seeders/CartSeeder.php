@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\User;
@@ -31,15 +32,19 @@ class CartSeeder extends Seeder
                     $randomSeller = rand(0, count($sellers)-1);
                 }while($sellers[$randomSeller]->id == $user->id);
                 $randomVoucher = rand(0, count($vouchers)-1);
+                DB::table('carts')->insert([
+                    'seller_id' => $sellers[$randomSeller]->id,
+                    'user_id' => $user->id,
+                    'voucher_id' => $vouchers[$randomVoucher]->id,
+                ]);
+                $cart = Cart::latest()->first();
                 foreach ($products as $product){
                     $random = rand(0,1);
                     if($random == 1){
-                        DB::table('carts')->insert([
-                           'seller_id' => $sellers[$randomSeller]->id,
-                           'product_id' => $product->id,
-                           'user_id' => $user->id,
-                           'voucher_id' => $vouchers[$randomVoucher]->id,
-                           'quantity' => rand(1,10)
+                        DB::table('cart_product')->insert([
+                            'cart_id' => $cart->id,
+                            'product_id' => $product->id,
+                            'quantity' => rand(1,10)
                         ]);
                     }
                 }

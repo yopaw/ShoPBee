@@ -17,7 +17,13 @@ class Seller extends Model
         return $this->belongsToMany(Voucher::class);
     }
 
-    public function transaction(){
-        return $this->hasMany(HeaderTransaction::class);
+    public function transactions(){
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function getTotalVoucherUsed($id){
+        return $this->transactions()
+            ->where('voucher_id','=',$id)
+            ->count();
     }
 }

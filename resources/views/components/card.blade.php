@@ -1,4 +1,4 @@
-<div class="card" style="width: 18rem;">
+<div class="card" style="width: 16.5rem; margin: 1rem">
     <img class="card-img-top" src="..." alt="Card image cap">
     <div class="card-body">
         <h5 class="card-title">Card title</h5>

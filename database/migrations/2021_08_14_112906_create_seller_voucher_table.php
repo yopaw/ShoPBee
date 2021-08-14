@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShopVouchersTable extends Migration
+class CreateSellerVoucherTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,7 @@ class CreateShopVouchersTable extends Migration
      */
     public function up()
     {
-        Schema::create('shop_vouchers', function (Blueprint $table) {
-            $table->id();
+        Schema::create('seller_voucher', function (Blueprint $table) {
             $table->foreignId('voucher_id')->constrained('vouchers');
             $table->foreignId('seller_id')->constrained('sellers');
             $table->softDeletes();
@@ -29,6 +28,6 @@ class CreateShopVouchersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shop_vouchers');
+        Schema::dropIfExists('seller_voucher');
     }
 }

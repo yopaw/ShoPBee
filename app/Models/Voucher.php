@@ -9,7 +9,16 @@ class Voucher extends Model
 {
     use HasFactory;
 
-    public function seller(){
+    public function sellers(){
         return $this->belongsToMany(Seller::class);
     }
+
+    public function transactions(){
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function getTotalVoucherUsed($id){
+//        return $this->transactions()
+    }
+
 }

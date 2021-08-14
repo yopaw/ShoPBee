@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    protected $fillable = ['name', 'price', 'stock', 'seller_id', 'description', 'product_type_id'];
 
     public function seller(){
         return $this->belongsTo(Seller::class);
@@ -17,7 +18,7 @@ class Product extends Model
         return $this->hasOne(ProductType::class);
     }
 
-    public function detailTransaction(){
-        return $this->belongsTo(DetailTransaction::class);
+    public function headerTransaction(){
+        return $this->belongsToMany(Transaction::class);
     }
 }

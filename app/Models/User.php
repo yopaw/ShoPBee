@@ -42,11 +42,15 @@ class User extends Authenticatable
     ];
 
     public function role(){
-        $this->hasOne(Role::class);
+        return $this->hasOne(Role::class);
     }
 
-    public function transaction(){
-        $this->hasMany(HeaderTransaction::class);
+    public function transactions(){
+        return $this->hasMany(HeaderTransaction::class);
+    }
+
+    public function requests(){
+        return $this->hasMany(Request::class);
     }
 
 }

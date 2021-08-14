@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHeaderTransactionsTable extends Migration
+class CreateRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateHeaderTransactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('header_transactions', function (Blueprint $table) {
+        Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('voucher_id')->constrained('vouchers');
-            $table->foreignId('seller_id')->constrained('sellers');
             $table->foreignId('user_id')->constrained('users');
-            $table->dateTime('transaction_date');
+            $table->foreignId('status_id')->constrained('status');
+            $table->string('seller_name');
+            $table->text('reason');
+            $table->text('description');
+            $table->dateTime('date');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -31,6 +33,6 @@ class CreateHeaderTransactionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('header_transactions');
+        Schema::dropIfExists('requests');
     }
 }

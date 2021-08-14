@@ -1,7 +1,6 @@
 <?php
-
+namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,15 +12,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages/home');
-});
+Route::get('/', HomeController::class);
 
 Route::get('/home', function () {
     return view('pages/home');
 });
 
+Route::get('/transactions',[TransactionController::class, 'index']);
+Route::get('/vouchers', [VoucherController::class,'index']);
+Route::get('/vouchers/create', [VoucherController::class, 'create']);
 
-Auth::routes();
+Route::get('/requests',[RequestController::class,'index']);
+
+Route::get('/insert',[ProductController::class, 'create']);
+Route::post('/insert',[ProductController::class, 'store'])->name('products.store');
+
+Route::get('/detail/{id}', [ProductController::class,'show']);
+
+//Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

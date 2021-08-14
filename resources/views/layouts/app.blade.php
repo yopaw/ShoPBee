@@ -18,13 +18,19 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     <style>
         body i {
             font-family:'FontAwesome'!important;
         }
+        @yield('css')
     </style>
+
+    <script>
+        @yield('script')
+    </script>
 </head>
-<body>
+<body style="margin-bottom: 3.75rem;">
 <div id="app">
     {{--        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">--}}
 {{--            <div class="container">--}}
