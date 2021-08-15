@@ -28,6 +28,6 @@
             <label for="stock">Product Stock</label>
             <input type="number" class="form-control" id="stock" name="stock" placeholder="Product Stock">
         </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 @endsection

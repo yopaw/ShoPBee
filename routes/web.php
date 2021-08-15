@@ -24,10 +24,11 @@ Route::get('/vouchers/create', [VoucherController::class, 'create']);
 
 Route::get('/requests',[RequestController::class,'index']);
 
+Route::put('/requests/edit',[RequestController::class,'update'])->name('requests.update');
 Route::get('/insert',[ProductController::class, 'create']);
 Route::post('/insert',[ProductController::class, 'store'])->name('products.store');
 
-Route::get('/detail/{id}', [ProductController::class,'show']);
+Route::get('/detail/{product}', [ProductController::class,'show']);
 
 //Auth::routes();
 

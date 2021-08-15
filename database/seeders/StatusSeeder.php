@@ -17,7 +17,7 @@ class StatusSeeder extends Seeder
         $statuses = ['Pending', 'Rejected', 'Accepted'];
 
         foreach($statuses as $status){
-            DB::table('status')
+            DB::table('statuses')
                 ->insert([
                    'name' => $status
                 ]);

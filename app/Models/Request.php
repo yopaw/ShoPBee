@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Request extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['reason','status_id'];
     public function user(){
         return $this->belongsTo(User::class);
     }
 
-    public function  status(){
+    public function status(){
         return $this->belongsTo(Status::class);
     }
 }
