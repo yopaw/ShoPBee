@@ -46,7 +46,11 @@ class User extends Authenticatable
     }
 
     public function transactions(){
-        return $this->hasMany(HeaderTransaction::class);
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
     }
 
     public function requests(){

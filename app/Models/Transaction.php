@@ -26,6 +26,10 @@ class Transaction extends Model
         return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
 
+    public function review(){
+        return $this->hasOne(Review::class);
+    }
+
     public function getTotalPrice($id){
         return DB::table('product_transaction')
             ->join('products', 'product_transaction.product_id','=','products.id')

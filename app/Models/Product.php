@@ -18,7 +18,7 @@ class Product extends Model
         return $this->hasOne(ProductType::class);
     }
 
-    public function headerTransaction(){
-        return $this->belongsToMany(Transaction::class);
+    public function transactions(){
+        return $this->belongsToMany(Transaction::class)->withPivot('quantity');
     }
 }

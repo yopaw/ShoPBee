@@ -6,7 +6,14 @@
         @foreach($transactions as $transaction)
             <div class="card" style="margin-bottom: 2rem">
                 <div class="card-body">
-                    <h3 class="card-title">Transactions from {{$transaction->seller->name}}</h3>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem">
+                        <h3 class="card-title">Transactions from {{$transaction->seller->name}}</h3>
+                        @if((strtotime(\Carbon\Carbon::now()) - strtotime($transaction->date)) / (60 * 60 * 24) < 3)
+                            <a href="">
+                                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Leave a Review</button>
+                            </a>
+                        @endif
+                    </div>
                     <table class="table table-hover">
                         <thead>
                         <tr>

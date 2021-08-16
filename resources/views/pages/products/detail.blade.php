@@ -1,6 +1,116 @@
 @extends('layouts/app')
 @section('css')
 
+    .rating-box {
+    width: 130px;
+    height: 130px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #FBC02D;
+    color: #fff
+    }
+
+    .rating-label {
+    font-weight: bold
+    }
+
+    .rating-bar {
+    width: 300px;
+    padding: 8px;
+    border-radius: 5px
+    }
+
+    .bar-container {
+    width: 100%;
+    background-color: #f1f1f1;
+    text-align: center;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 5px
+    }
+
+    .bar-5 {
+    width: 70%;
+    height: 13px;
+    background-color: #FBC02D;
+    border-radius: 20px
+    }
+
+    .bar-4 {
+    width: 30%;
+    height: 13px;
+    background-color: #FBC02D;
+    border-radius: 20px
+    }
+
+    .bar-3 {
+    width: 20%;
+    height: 13px;
+    background-color: #FBC02D;
+    border-radius: 20px
+    }
+
+    .bar-2 {
+    width: 10%;
+    height: 13px;
+    background-color: #FBC02D;
+    border-radius: 20px
+    }
+
+    .bar-1 {
+    width: 0%;
+    height: 13px;
+    background-color: #FBC02D;
+    border-radius: 20px
+    }
+
+    td {
+    padding-bottom: 10px
+    }
+
+    .star-active {
+    color: #FBC02D;
+    margin-top: 10px;
+    margin-bottom: 10px
+    }
+
+    .star-active:hover {
+    color: #F9A825;
+    cursor: pointer
+    }
+
+    .star-inactive {
+    color: #CFD8DC;
+    margin-top: 10px;
+    margin-bottom: 10px
+    }
+
+    .blue-text {
+    color: #0091EA
+    }
+
+    .content {
+        font-size: 18px
+    }
+
+    .profile-pic {
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    margin-right: 30px
+    }
+
+    .pic {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px
+    }
+
+    .vote {
+    cursor: pointer
+    }
+
     img {
     max-width: 100%; }
 
@@ -163,20 +273,24 @@
             <div class="container-fliud">
                 <div class="wrapper row">
                     <div class="preview col-md-6">
-
                         <div class="preview-pic tab-content">
-                            <div class="tab-pane active" id="pic-1"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-2"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-3"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-4"><img src="http://placekitten.com/400/252" /></div>
-                            <div class="tab-pane" id="pic-5"><img src="http://placekitten.com/400/252" /></div>
+                            <div class="tab-pane active" id="pic-1"><img src="http://placekitten.com/400/252"/></div>
+                            <div class="tab-pane" id="pic-2"><img src="http://placekitten.com/400/252"/></div>
+                            <div class="tab-pane" id="pic-3"><img src="http://placekitten.com/400/252"/></div>
+                            <div class="tab-pane" id="pic-4"><img src="http://placekitten.com/400/252"/></div>
+                            <div class="tab-pane" id="pic-5"><img src="http://placekitten.com/400/252"/></div>
                         </div>
                         <ul class="preview-thumbnail nav nav-tabs">
-                            <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-2" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-3" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-4" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                            <li><a data-target="#pic-5" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
+                            <li class="active"><a data-target="#pic-1" data-toggle="tab"><img
+                                        src="http://placekitten.com/200/126"/></a></li>
+                            <li><a data-target="#pic-2" data-toggle="tab"><img
+                                        src="http://placekitten.com/200/126"/></a></li>
+                            <li><a data-target="#pic-3" data-toggle="tab"><img
+                                        src="http://placekitten.com/200/126"/></a></li>
+                            <li><a data-target="#pic-4" data-toggle="tab"><img
+                                        src="http://placekitten.com/200/126"/></a></li>
+                            <li><a data-target="#pic-5" data-toggle="tab"><img
+                                        src="http://placekitten.com/200/126"/></a></li>
                         </ul>
 
                     </div>
@@ -192,9 +306,11 @@
                             </div>
                             <span class="review-no">41 reviews</span>
                         </div>
-                        <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
+                        <p class="product-description">Suspendisse quos? Tempus cras iure temporibus? Eu laudantium
+                            cubilia sem sem! Repudiandae et! Massa senectus enim minim sociosqu delectus posuere.</p>
                         <h4 class="price">current price: <span>$180</span></h4>
-                        <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong></p>
+                        <p class="vote"><strong>91%</strong> of buyers enjoyed this product! <strong>(87 votes)</strong>
+                        </p>
                         <h5 class="sizes">sizes:
                             <span class="size" data-toggle="tooltip" title="small">s</span>
                             <span class="size" data-toggle="tooltip" title="medium">m</span>
@@ -208,11 +324,22 @@
                         </h5>
                         <div class="action">
                             <button class="add-to-cart btn btn-default" type="button">add to cart</button>
-                            <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button>
+                            <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        @foreach($product->transactions as $transaction)
+            @if(isset($transaction->review))
+                <x-review
+                    :content="$transaction->review->content"
+                    :username="$transaction->user->username"
+                    :rating="$transaction->review->rating"
+                    :date="$transaction->review->date">
+                </x-review>
+            @endif
+        @endforeach
     </div>
 @endsection

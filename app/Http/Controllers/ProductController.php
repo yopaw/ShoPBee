@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Seller;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -68,6 +69,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $transactions = $product->transactions();
         return view('pages/products/detail',compact('product'));
     }
 

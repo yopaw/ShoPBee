@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
-class CreateRequestsTable extends Migration
+class CreateReviewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,13 @@ class CreateRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('requests', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('status_id')->default(1)->constrained('statuses');
-            $table->string('seller_name');
-            $table->text('reason')->default('');
-            $table->text('description');
+            $table->foreignId('transaction_id')->constrained('transactions');
+            $table->text('content');
+            $table->integer('rating');
             $table->dateTime('date')->default(Carbon::now()->format('Y-m-d H:i:s'));
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -34,6 +32,6 @@ class CreateRequestsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('requests');
+        Schema::dropIfExists('reviews');
     }
 }

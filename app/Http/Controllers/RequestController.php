@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RequestController extends Controller
@@ -24,7 +25,9 @@ class RequestController extends Controller
      */
     public function create()
     {
-        return view('pages/requests/create');
+        $user = auth()->user();
+        if($user == null) $user = User::find(1);
+        return view('pages/requests/create', compact('user'));
     }
 
     /**
@@ -35,7 +38,16 @@ class RequestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = auth()->user();
+        if($user == null) $user = User::find(1);
+        $request = $request->all();
+        $apply = $user->requests()->create([
+            'user_id' => $user->id,
+            'seller_name' => $request['seller_name'],
+            'description' => $request['description']
+        ]);
+        $apply->save();
+        return back();
     }
 
     /**

@@ -23,7 +23,8 @@ Route::get('/vouchers', [VoucherController::class,'index']);
 Route::get('/vouchers/create', [VoucherController::class, 'create']);
 
 Route::get('/requests',[RequestController::class,'index']);
-
+Route::get('/requests/create', [RequestController::class,'create']);
+Route::post('/requests/store/{user}', [RequestController::class,'store'])->name('requests.store');
 Route::put('/requests/edit',[RequestController::class,'update'])->name('requests.update');
 Route::get('/insert',[ProductController::class, 'create']);
 Route::post('/insert',[ProductController::class, 'store'])->name('products.store');

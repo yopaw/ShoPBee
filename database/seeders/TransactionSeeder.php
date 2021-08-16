@@ -6,7 +6,6 @@ use App\Models\Product;
 use App\Models\Seller;
 use App\Models\Transaction;
 use App\Models\User;
-use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
