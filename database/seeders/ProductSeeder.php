@@ -33,7 +33,8 @@ class ProductSeeder extends Seeder
                 'name' => $name,
                 'price' => $price,
                 'description' => $description,
-                'stock' => $stock
+                'stock' => $stock,
+                'image' => '6adhqAE8ahLWMVvq5iDeOWCvqGxpPBfCSTbUHHhn.jpg'
             ]);
         }
     }

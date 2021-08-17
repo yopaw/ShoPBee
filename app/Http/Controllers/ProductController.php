@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\Seller;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,7 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+        return view('pages/home', compact('products'));
     }
 
     /**
@@ -29,7 +31,7 @@ class ProductController extends Controller
     public function create()
     {
         $types = ProductType::all();
-        return view('pages/products/insert', compact('types'));
+        return view('pages/products/create', compact('types'));
     }
 
     /**
@@ -40,22 +42,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
-//        $productRequest = $request->only('name','type','price','stock','description');
-        Validator::make($request->all(),[
-            'name' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-            'description' => 'required'
-        ])->validate();
-        $seller = Seller::find(1);
-        $product = $seller->product()->create([
+//        Validator::make($request->all(),[
+//            'name' => 'required',
+//            'price' => 'required',
+//            'stock' => 'required',
+//            'description' => 'required',
+//            'type' => 'required'
+//        ])->validate();
+        $user = auth()->user();
+        $seller = $user->seller;
+        $file = $request->file('image');
+        $hash = str_replace('.' . $file->extension(), '', $file->hashName());
+        $path = "$hash.{$file->getClientOriginalExtension()}";
+        $file->storeAs("products/",$path);
+        $productType = ProductType::where('name',$request->type)->first();
+        $product = $seller->products()->create([
             'name' => $request->name,
             'price' => $request->price,
             'stock' => $request->stock,
             'description' => $request->description,
-            'seller_id' => 1,
-            'product_type_id' => 1
+            'seller_id' => $seller->id,
+            'product_type_id' => $productType->id,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => null,
         ]);
         $product->save();
         return back()->with('status', 'Insert Success');
@@ -69,7 +78,6 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $transactions = $product->transactions();
         return view('pages/products/detail',compact('product'));
     }
 

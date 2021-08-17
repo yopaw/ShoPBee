@@ -9,7 +9,11 @@ class Seller extends Model
 {
     use HasFactory;
 
-    public function product(){
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function products(){
         return $this->hasMany(Product::class);
     }
 

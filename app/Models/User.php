@@ -57,4 +57,8 @@ class User extends Authenticatable
         return $this->hasMany(Request::class);
     }
 
+    public function seller(){
+        return $this->hasOne(Seller::class);
+    }
+
 }

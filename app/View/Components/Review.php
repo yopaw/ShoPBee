@@ -14,18 +14,12 @@ class Review extends Component
 
     public $username;
 
-    public $content;
+    public $review;
 
-    public $rating;
-
-    public $date;
-
-    public function __construct($username, $content, $rating, $date)
+    public function __construct($username, $review)
     {
         $this->username = $username;
-        $this->content = $content;
-        $this->rating = $rating;
-        $this->date = $date;
+        $this->review = $review;
     }
 
     /**

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HeaderTransaction;
-use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class TransactionController extends Controller
+class LoginController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +14,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-
-        $transactions = Transaction::where('user_id',$user->id)->get();
-        return view('pages/transactions/index', compact('transactions'));
+        return view('auth/login');
     }
 
     /**
@@ -85,5 +81,19 @@ class TransactionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function authenticate(Request $request){
+        $credentials = $request->validate([
+            'email' => ['required','email'],
+            'password' => ['required']
+        ]);
+
+        if(Auth::attempt($credentials)){
+            $request->session()->regenerate();
+            return redirect()->intended(route('home'));
+        }
+
+        return back();
     }
 }

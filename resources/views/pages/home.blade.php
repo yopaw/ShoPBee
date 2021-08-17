@@ -10,8 +10,9 @@
 @section('content')
     <div id="outer-container">
         @foreach($products as $product)
-        @component('components/card')
-        @endcomponent
+        <x-card :product="$product">
+
+        </x-card>
         @endforeach
     </div>
 @endsection

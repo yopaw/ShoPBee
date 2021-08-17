@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HeaderTransaction;
 use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class TransactionController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-
-        $transactions = Transaction::where('user_id',$user->id)->get();
-        return view('pages/transactions/index', compact('transactions'));
+        //
     }
 
     /**
@@ -26,9 +23,10 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Transaction $transaction)
     {
-        //
+        if($transaction->review != null) return back();
+        return view('pages/reviews/create', compact('transaction'));
     }
 
     /**
@@ -37,9 +35,21 @@ class TransactionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Transaction $transaction)
     {
-        //
+        $user = auth()->user();
+        $requestReview = $request->only('content', 'rating');
+        $review = $transaction->review()->create([
+            'user_id' => $user->id,
+            'content' => $requestReview['content'],
+            'rating' => $requestReview['rating']
+        ]);
+        $review->save();
+
+        $user = auth()->user();
+
+        $transactions = Transaction::where('user_id',$user->id)->get();
+        return view('pages.transactions.index', compact('transactions'));
     }
 
     /**
