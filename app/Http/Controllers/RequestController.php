@@ -94,7 +94,7 @@ class RequestController extends Controller
             $user = auth()->user();
             Seller::create([
                 'user_id' => $user->id,
-                'seller_name' => $requestModel->seller_name
+                'name' => $requestModel->seller_name
             ]);
         }
         $requestModel->update($req);
