@@ -58,14 +58,13 @@ class TransactionController extends Controller
             if($product->pivot->quantity > $product->stock) return abort(403);
         }
 
-        if($totalPrice > $voucher->maximum_price){
-            $discount = $voucher->maximum_price  * $voucher->discount / 100;
+        if($totalPrice * $voucher->discount / 100 > $voucher->maximum_price){
+            $discount = $voucher->maximum_price;
         }
         else $discount = $totalPrice * $voucher->discount / 100;
-        if($discount > $voucher->minimum_price){
-            $discount = $voucher->minimum_price;
-        }
+
         if($totalPrice - $discount > $money) return abort(403);
+        if($totalPrice < $voucher->minimum_price) return abort(403);
 
         $transaction = $user->transactions()->create([
             'user_id' => $cart->user->id,
@@ -98,10 +97,17 @@ class TransactionController extends Controller
             ])->delete();
         }
 
+        $seller = $cart->seller;
+
+        $seller->user->update([
+            'money' => $seller->user->money + ($totalPrice - $discount )
+        ]);
+
         $user->update([
             'money' => $money - ($totalPrice - $discount)
         ]);
 
+        $seller->save();
         $user->save();
         $cart->delete();
 

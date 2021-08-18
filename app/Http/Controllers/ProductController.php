@@ -109,14 +109,11 @@ class ProductController extends Controller
            'price' => 'required',
            'stock' => 'required',
            'description' => 'required',
-           'type' => 'required',
            'image' => 'required'
        ])->validate();
 
         $user = auth()->user();
         $seller = $user->seller;
-
-        $productType = ProductType::where('name',$request->type)->first();
 
         $product->update([
             'name' => $request->name,
@@ -124,7 +121,6 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'description' => $request->description,
             'seller_id' => $seller->id,
-            'product_type_id' => $productType->id,
             'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
         ]);
 
