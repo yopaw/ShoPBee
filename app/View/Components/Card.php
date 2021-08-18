@@ -13,10 +13,11 @@ class Card extends Component
      */
 
     public $product;
-
-    public function __construct($product)
+    public $type;
+    public function __construct($product, $type)
     {
         $this->product = $product;
+        $this->type = $type;
     }
 
     /**

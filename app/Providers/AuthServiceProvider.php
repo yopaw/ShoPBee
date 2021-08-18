@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\ProductController;
+use App\Models\Product;
+use App\Models\Seller;
+use App\Models\User;
+use App\Policies\ReviewPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -24,7 +29,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
+        Gate::define('manage-product',function (User $user, Product $product){
+            $seller = Seller::where('user_id', $user->id)->first();
+            return $seller->id == $product->seller_id;
+        });
+        Gate::define('create-review', [ReviewPolicy::class,'create']);
     }
 }

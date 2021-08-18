@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cart;
 use App\Models\Product;
 use App\Models\Seller;
 use App\Models\Transaction;
@@ -19,41 +20,27 @@ class TransactionSeeder extends Seeder
      */
     public function run()
     {
-        $users = User::all();
-        $sellers = Seller::all();
-        $vouchers = null;
-        $randomUser = 0;
-        $randomSeller = 0;
-        $randomVoucher = 0;
+        $carts = Cart::all();
 
-        foreach (range(1,20) as $value){
-            $randomUser = rand(0,count($users)-1);
-            do{
-                $randomSeller = rand(0, count($sellers)-1);
-            }while($users[$randomUser]->id == $sellers[$randomSeller]->id ||
-                count($sellers[$randomSeller]->vouchers()->get()) == 0);
-            $vouchers = $sellers[$randomSeller]->vouchers()->get();
-            $randomVoucher = rand(0, count($vouchers)-1);
-            $userID = $users[$randomUser]->id;
-            $sellerID = $sellers[$randomSeller]->id;
-            $voucherID = $vouchers[$randomVoucher]->id;
+        foreach ($carts as $cart){
+            $seller = $cart->seller;
             $date = Carbon::now()->format('Y-m-d H:i:s');
+
             DB::table('transactions')->insert([
-                'user_id' => $userID,
-                'seller_id' => $sellerID,
-                'voucher_id' => $voucherID,
+                'user_id' => $cart->user->id,
+                'seller_id' => $cart->seller->id,
+                'voucher_id' => $cart->voucher_id,
                 'date' => $date
             ]);
-        }
 
-        $transactions = Transaction::all();
-        $products = Product::all();
-        foreach (range(1,count($transactions)) as $i){
-            $random = rand(1,5);
-            foreach(range(1, $random) as $j){
+            $transaction = Transaction::all()->last();
+
+            $products = $cart->products;
+            $randomProduct = rand(1,count($products));
+            foreach(range(1, $randomProduct) as $j){
                 DB::table('product_transaction')->insert([
                     'product_id' => $products[$j-1]->id,
-                    'transaction_id' => $transactions[$i-1]->id,
+                    'transaction_id' => $transaction->id,
                     'quantity' => rand(1,10)
                 ]);
             }

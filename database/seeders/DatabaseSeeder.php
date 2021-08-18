@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
             ProductTypeSeeder::class,
             ProductSeeder::class,
             SellerVoucherSeeder::class,
-            TransactionSeeder::class,
             CartSeeder::class,
+            TransactionSeeder::class,
             ReviewSeeder::class
         ]);
     }

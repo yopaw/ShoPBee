@@ -19,13 +19,13 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    @yield('links')
     <style>
         body i {
             font-family:'FontAwesome'!important;
         }
         @yield('css')
     </style>
-
     <script>
         @yield('script')
     </script>

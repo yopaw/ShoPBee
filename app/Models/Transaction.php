@@ -36,4 +36,6 @@ class Transaction extends Model
             ->where('product_transaction.transaction_id','=',$id)
             ->sum(DB::raw('products.price * product_transaction.quantity'));
     }
+
+
 }

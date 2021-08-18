@@ -15,12 +15,16 @@ class Product extends Model
         return $this->belongsTo(Seller::class);
     }
 
-    public function type(){
-        return $this->hasOne(ProductType::class);
+    public function productType(){
+        return $this->belongsTo(ProductType::class);
     }
 
     public function transactions(){
         return $this->belongsToMany(Transaction::class)->withPivot('quantity');
+    }
+
+    public function carts(){
+        return $this->belongsToMany(Cart::class)->withPivot('quantity');
     }
 
     public function rating($id){

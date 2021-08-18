@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Product;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ValidateSeller
 {
@@ -16,7 +18,8 @@ class ValidateSeller
      */
     public function handle(Request $request, Closure $next)
     {
-        if($request->user()->seller == null) return back();
+        $seller = $request->user()->seller;
+        if($seller == null) return back();
         return $next($request);
     }
 }

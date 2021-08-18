@@ -5,30 +5,52 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
+            @if(request()->user() == null)
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{route('login')}}">Login <span class="sr-only">(current)</span></a>
+                </li>
+            @endif
+            @if(request()->user() != null)
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="{{route('carts.index')}}">Carts</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Dropdown
+                    Products
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                    <a class="dropdown-item" href="{{route('products.create')}}">Insert New Product</a>
+                    <a class="dropdown-item" href="{{route('products.view')}}">View All Products</a>
+                    <a class="dropdown-item" href="{{route('products.manage')}}">Manage All Products</a>
                 </div>
             </li>
+            @endif
+            @if(request()->user() != null)
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Transactions
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{route('transactions.index','buyer')}}">Buyer Transactions</a>
+                        @if(request()->user()->seller != null)
+                            <a class="dropdown-item" href="{{route('transactions.index','seller')}}">Seller Transactions</a>
+                        @endif
+                    </div>
+                </li>
+            @endif
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Disabled</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-2 my-lg-0" method="GET">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
+        @if(auth()->user() != null)
+            <form action="{{route('logout')}}" class="form-inline my-2 my-lg-0" method="POST">
+                @csrf
+                <button style="margin-left: 1rem" class="btn btn-outline-success my-2 my-sm-0" type="submit">Logout</button>
+            </form>
+        @endif
     </div>
 </nav>

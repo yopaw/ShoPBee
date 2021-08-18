@@ -42,19 +42,18 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-//        Validator::make($request->all(),[
-//            'name' => 'required',
-//            'price' => 'required',
-//            'stock' => 'required',
-//            'description' => 'required',
-//            'type' => 'required'
-//        ])->validate();
+        Validator::make($request->all(),[
+            'name' => 'required',
+            'price' => 'required',
+            'stock' => 'required',
+            'description' => 'required',
+            'type' => 'required',
+            'image' => 'required'
+        ])->validate();
+
         $user = auth()->user();
         $seller = $user->seller;
-        $file = $request->file('image');
-        $hash = str_replace('.' . $file->extension(), '', $file->hashName());
-        $path = "$hash.{$file->getClientOriginalExtension()}";
-        $file->storeAs("products/",$path);
+
         $productType = ProductType::where('name',$request->type)->first();
         $product = $seller->products()->create([
             'name' => $request->name,
@@ -66,7 +65,14 @@ class ProductController extends Controller
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => null,
         ]);
-        $product->save();
+
+        if($file = $request->file('image')){
+            $hash = str_replace('.' . $file->extension(), '', $file->hashName());
+            $path = "$hash.{$file->getClientOriginalExtension()}";
+            $file->storeAs("products/",$path);
+            $product->image = $path;
+            $product->save();
+        }
         return back()->with('status', 'Insert Success');
     }
 
@@ -87,9 +93,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
-        //
+        $types = ProductType::all();
+        return view('pages.products.edit', compact('product', 'types'));
     }
 
     /**
@@ -99,9 +106,40 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        //
+//        Validator::make($request->all(),[
+//            'name' => 'required',
+//            'price' => 'required',
+//            'stock' => 'required',
+//            'description' => 'required',
+//            'type' => 'required',
+//            'image' => 'required'
+//        ])->validate();
+
+        $user = auth()->user();
+        $seller = $user->seller;
+
+        $productType = ProductType::where('name',$request->type)->first();
+        $product->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'description' => $request->description,
+            'seller_id' => $seller->id,
+            'product_type_id' => $productType->id,
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        if($file = $request->file('image')){
+            $hash = str_replace('.' . $file->extension(), '', $file->hashName());
+            $path = "$hash.{$file->getClientOriginalExtension()}";
+            $file->storeAs("products/",$path);
+            $product->image = $path;
+            $product->save();
+        }
+
+        return back()->with('status', 'Update Success');
     }
 
     /**
@@ -113,5 +151,17 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function manage(){
+        $seller = auth()->user()->seller;
+        $products = Product::where('seller_id',$seller->id)->get();
+        return view('pages.products.manage', compact('products'));
+    }
+
+    public function view(){
+        $seller = auth()->user()->seller;
+        $products = Product::where('seller_id', $seller->id)->get();
+        return view('pages.products.index', compact('products'));
     }
 }

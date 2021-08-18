@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HeaderTransaction;
-use App\Models\Transaction;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 
-class TransactionController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($type)
+    public function index()
     {
-        $user = auth()->user();
-
-        if($type == 'buyer') $transactions = Transaction::where('user_id',$user->id)->get();
-        else{
-            $seller = auth()->user()->seller;
-            $transactions = Transaction::where('seller_id',$seller->id)->get();
-        }
-        return view('pages/transactions/index', compact('transactions','type'));
+        $carts = auth()->user()->carts;
+        return view('pages.carts.index', compact('carts'));
     }
 
     /**
@@ -52,9 +45,9 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cart $cart)
     {
-        //
+        return view('pages.carts.show', compact('cart'));
     }
 
     /**

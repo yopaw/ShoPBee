@@ -7,12 +7,18 @@
             <div class="card" style="margin-bottom: 2rem">
                 <div class="card-body">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 1rem">
-                        <h3 class="card-title">Transactions from {{$transaction->seller->name}}</h3>
+                        @if($type == 'buyer')
+                            <h3 class="card-title">Transactions from {{$transaction->seller->name}}</h3>
+                        @else
+                            <h3 class="card-title">Transactions from {{$transaction->user->username}}</h3>
+                        @endif
                         @if((strtotime(\Carbon\Carbon::now()) - strtotime($transaction->date)) / (60 * 60 * 24) < 3
                             && $transaction->review == null)
-                            <a href="{{route('reviews.create',$transaction)}}">
-                                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Leave a Review</button>
-                            </a>
+                                @can('create-review', $transaction)
+                                    <a href="{{route('reviews.create',$transaction)}}">
+                                        <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Leave a Review</button>
+                                    </a>
+                                @endcan
                         @endif
                     </div>
                     <h4 class="card-title">Transaction Date: {{$transaction->date}}</h4>
