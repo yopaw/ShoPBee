@@ -83,7 +83,7 @@ class TransactionController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
 
     /**
