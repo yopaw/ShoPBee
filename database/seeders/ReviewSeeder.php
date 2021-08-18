@@ -17,19 +17,16 @@ class ReviewSeeder extends Seeder
     public function run()
     {
         $users = User::all();
-        foreach ($users as $user){
+        foreach ($users as $user) {
             $transactions = $user->transactions()->get();
-            foreach ($transactions as $transaction){
-                $random = rand(0,1);
-                if($random == 1){
-                    $randomRating = rand(1,5);
-                    DB::table('reviews')->insert([
-                        'user_id' => $user->id,
-                        'transaction_id' => $transaction->id,
-                        'content' => 'real content',
-                        'rating' => $randomRating
-                    ]);
-                }
+            foreach ($transactions as $transaction) {
+                $randomRating = rand(1, 5);
+                DB::table('reviews')->insert([
+                    'user_id' => $user->id,
+                    'transaction_id' => $transaction->id,
+                    'content' => 'real content',
+                    'rating' => $randomRating
+                ]);
             }
         }
     }

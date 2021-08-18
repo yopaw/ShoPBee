@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\ValidateAdmin;
+use App\Http\Middleware\ValidateLogin;
+use App\Http\Middleware\ValidateMember;
 use App\Http\Middleware\ValidateSeller;
 use App\Models\Product;
 use Illuminate\Support\Facades\File;
@@ -16,30 +19,33 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', [ProductController::class, 'index'])->name('home');
-
-Route::get('/home', [ProductController::class,'index']);
-
+Route::get('/', [ProductController::class, 'index']);
+Route::get('/home', [ProductController::class, 'index'])->name('home');
 Route::get('/login', \App\Http\Controllers\Auth\LoginController::class)->name('login');
 Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.authenticate');
 Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+Route::get('/register', [UserController::class, 'create'])->name('register.create')->middleware(ValidateLogin::class);
+Route::post('/register', [UserController::class, 'store'])->name('register.store')->middleware(ValidateLogin::class);
 
-Route::get('/vouchers', [VoucherController::class,'index']);
-Route::get('/vouchers/create', [VoucherController::class, 'create']);
+Route::middleware([Authenticate::class, 'can:isAdmin'])->prefix('vouchers')->name('vouchers.')->group(function(){
+    Route::get('/', [VoucherController::class,'index'])->name('index');
+    Route::get('/create', [VoucherController::class, 'create'])->name('create');
+    Route::post('/store', [VoucherController::class, 'store'])->name('store');
+});
 
 Route::middleware([Authenticate::class])->prefix('requests')->name('requests.')->group(function(){
     Route::get('/',[RequestController::class,'index'])->name('index');
-    Route::get('/create', [RequestController::class,'create'])->name('create');
-    Route::post('/store/{user}', [RequestController::class,'store'])->name('store');
-    Route::put('/edit',[RequestController::class,'update'])->name('update');
+    Route::get('/create', [RequestController::class,'create'])->name('create')->middleware('can:create-request');
+    Route::post('/store', [RequestController::class,'store'])->name('store')->middleware('can:create-request');
+    Route::put('/edit',[RequestController::class,'update'])->name('update')->middleware('can:isAdmin');
 });
 
 
 
-Route::get('storage/{filename}', function ($filename)
+Route::get('storage/{type}/{filename}', function ($type, $filename)
 {
-    $path = storage_path('app/products/' . $filename);
+    if($type == 'users') $path = storage_path('app/users/'.$filename);
+    else $path = storage_path('app/products/' . $filename);
     if (!File::exists($path)) {
         abort(404);
     }
@@ -62,6 +68,7 @@ Route::middleware([Authenticate::class,ValidateSeller::class])->prefix('products
     Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('destroy')->middleware('can:manage-product,product');
     Route::get('/manage', [ProductController::class, 'manage'])->name('manage');
     Route::get('/view', [ProductController::class, 'view'])->name('view');
+    Route::get('/show/{product}', [ProductController::class,'show'])->name('show')->withoutMiddleware([ValidateSeller::class, Authenticate::class]);
 });
 
 Route::middleware([Authenticate::class])->prefix('reviews')->name('reviews.')->group(function(){
@@ -71,15 +78,16 @@ Route::middleware([Authenticate::class])->prefix('reviews')->name('reviews.')->g
     Route::put('/edit/{review}', [ReviewController::class, 'update'])->name('update')->middleware('can:update-review,review');;
 });
 
-Route::middleware([Authenticate::class])->prefix('transactions')->name('transactions.')->group(function(){
+Route::middleware([Authenticate::class, ValidateMember::class])->prefix('transactions')->name('transactions.')->group(function(){
     Route::get('/{type}',[TransactionController::class, 'index'])->name('index');
     Route::post('/store/{cart}', [TransactionController::class, 'store'])->name('store');
 });
 
-Route::middleware([Authenticate::class])->prefix('carts')->name('carts.')->group(function(){
+Route::middleware([Authenticate::class, ValidateMember::class])->prefix('carts')->name('carts.')->group(function(){
     Route::get('/', [CartController::class, 'index'])->name('index');
+    Route::post('/{product}', [CartController::class, 'store'])->name('store')->middleware('can:create-cart,product');
     Route::get('/{cart}', [CartController::class, 'show'])->name('show')->middleware('can:view-cart,cart');
+    Route::delete('/{cart}/{product}', [CartController::class, 'destroy'])->name('destroy')->middleware('can:view-cart,cart');
 });
 
-Route::get('/detail/{product}', [ProductController::class,'show'])->name('products.show');
 

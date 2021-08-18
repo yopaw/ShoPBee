@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Seller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 
-class RequestController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +15,7 @@ class RequestController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('isAdmin')){
-            $requests = \App\Models\Request::all();
-        }
-        else{
-            $requests = auth()->user()->requests;
-        }
-        return view('pages/requests/index', compact('requests'));
+        //
     }
 
     /**
@@ -32,9 +25,7 @@ class RequestController extends Controller
      */
     public function create()
     {
-        $user = auth()->user();
-        if($user == null) $user = User::find(1);
-        return view('pages/requests/create', compact('user'));
+        return view('auth.register');
     }
 
     /**
@@ -45,16 +36,28 @@ class RequestController extends Controller
      */
     public function store(Request $request)
     {
-        $user = auth()->user();
-        if($user == null) $user = User::find(1);
-        $request = $request->all();
-        $apply = $user->requests()->create([
-            'user_id' => $user->id,
-            'seller_name' => $request['seller_name'],
-            'description' => $request['description']
-        ]);
-        $apply->save();
-        return back();
+        Validator::make($request->all(),[
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'money' => 'required',
+            'image' => 'required'
+        ])->validate();
+
+        if($file = $request->file('image')){
+            $hash = str_replace('.' . $file->extension(), '', $file->hashName());
+            $path = "$hash.{$file->getClientOriginalExtension()}";
+            $file->storeAs("users/",$path);
+            User::create([
+                'username' => $request->username,
+                'password' => bcrypt($request->password),
+                'email' => $request->email,
+                'money' => $request->money,
+                'image' => $path
+            ]);
+        }
+
+        return redirect()->route('login');
     }
 
     /**
@@ -86,20 +89,9 @@ class RequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $req = $request->only('reason', 'status_id');
-        $requestModel = \App\Models\Request::find($request->all()['id']);
-        if($request->status_id == 3){
-            $user = auth()->user();
-            Seller::create([
-                'user_id' => $user->id,
-                'seller_name' => $requestModel->seller_name
-            ]);
-        }
-        $requestModel->update($req);
-        $requestModel->save();
-        return back();
+        //
     }
 
     /**

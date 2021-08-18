@@ -22,7 +22,6 @@ class CartSeeder extends Seeder
         $users = User::all();
         $products = Product::all();
         $sellers = Seller::all();
-        $vouchers = Voucher::all();
         $randomSeller = 0;
         foreach($users as $user){
             $random = rand(0,1);
@@ -30,11 +29,9 @@ class CartSeeder extends Seeder
                 do{
                     $randomSeller = rand(0, count($sellers)-1);
                 }while($sellers[$randomSeller]->id == $user->id);
-                $randomVoucher = rand(0, count($vouchers)-1);
                 DB::table('carts')->insert([
                     'seller_id' => $sellers[$randomSeller]->id,
                     'user_id' => $user->id,
-                    'voucher_id' => $vouchers[$randomVoucher]->id,
                 ]);
                 $cart = Cart::all()->last();
                 $randomProduct = rand(1, count($products));

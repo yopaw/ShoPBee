@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\HeaderTransaction;
 use App\Models\Transaction;
+use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -47,16 +48,37 @@ class TransactionController extends Controller
     public function store(Request $request, Cart $cart)
     {
         $user = auth()->user();
+        $totalPrice = $cart->getTotalPrice($cart->id);
+        $money = $user->money;
+        $discount = 0;
+        $voucher = Voucher::where('name',$request->voucher)->first();
+        if($voucher->stock <= 0) return abort(403);
+
+        foreach ($cart->products as $product){
+            if($product->pivot->quantity > $product->stock) return abort(403);
+        }
+
+        if($totalPrice > $voucher->maximum_price){
+            $discount = $voucher->maximum_price  * $voucher->discount / 100;
+        }
+        else $discount = $totalPrice * $voucher->discount / 100;
+        if($discount > $voucher->minimum_price){
+            $discount = $voucher->minimum_price;
+        }
+        if($totalPrice - $discount > $money) return abort(403);
+
         $transaction = $user->transactions()->create([
             'user_id' => $cart->user->id,
             'seller_id' => $cart->seller->id,
-            'voucher_id' => $cart->voucher->id,
+            'voucher_id' => $voucher->id,
             'date' => Carbon::now()->format('Y-m-d H:i:s')
         ]);
+
 
         $transaction->save();
 
         $lastTransaction = Transaction::all()->last();
+
 
         foreach ($cart->products as $product){
             DB::table('product_transaction')->insert([
@@ -70,7 +92,18 @@ class TransactionController extends Controller
             ]);
 
             $product->save();
+            DB::table('cart_product')->where([
+                ['product_id',$product->id],
+                ['cart_id',$cart->id]
+            ])->delete();
         }
+
+        $user->update([
+            'money' => $money - ($totalPrice - $discount)
+        ]);
+
+        $user->save();
+        $cart->delete();
 
         return redirect()->route('home');
     }

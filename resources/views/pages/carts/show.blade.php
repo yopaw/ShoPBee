@@ -92,7 +92,7 @@
                   @foreach($cart->products as $product)
                        <div class="border border-gainsboro p-3 mt-3 clearfix item">
                            <div class="text-lg-left">
-                               <img width="100px" src="{{route('image',$product->image)}}" alt="">
+                               <img width="100px" src="{{route('image',['products',$product->image])}}" alt="">
                            </div>
                            <div class="col-lg-5 col-5 text-lg-left">
                                <h3 class="h6 mb-0">{{$product->name}}<br>
@@ -102,19 +102,24 @@
                            <div class="product-price d-none">50</div>
                            <div class="pass-quantity col-lg-3 col-md-4 col-sm-3">
                                <label for="pass-quantity" class="pass-quantity">Quantity</label>
-                               <input class="form-control" type="number" value="{{$product->pivot->quantity}}" min="1">
+                               <input disabled class="form-control" type="number" value="{{$product->pivot->quantity}}" min="1">
                            </div>
                            <div class="col-lg-2 col-md-1 col-sm-2 product-line-price pt-4">
                             <span class="product-line-price">Rp.{{$product->price}}
                         </span>
                            </div>
                            <div class="remove-item pt-4">
-                               <button class="btn btn-outline-danger my-2 my-sm-0"
-                                       type="button">Delete</button>
-                               </button>
+                               <form action="{{route('carts.destroy',[$cart,$product])}}" method="POST">
+                                   @method('DELETE')
+                                   @csrf
+                                   <button class="btn btn-outline-danger my-2 my-sm-0"
+                                           type="submit">Delete</button>
+                                   </button>
+                               </form>
                            </div>
                        </div>
                    @endforeach
+                   <form action="{{route('transactions.store',$cart)}}" method="POST">
                    <div class="form-group"  style="margin-top: 1rem">
                        <h2>Voucher</h2>
                        <select class="form-control" id="voucher" name="voucher">
@@ -123,10 +128,11 @@
                            @endforeach
                        </select>
                    </div>
-                   <form action="{{route('transactions.store',$cart)}}" method="POST">
+                       {{$errors->first()}}
+                   @error('voucher')<div class="text-danger">{{$message}}</div>@enderror
                        @csrf
                        <div>
-                           <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Order Summary</button>
+                           <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Checkout</button>
                        </div>
                    </form>
                </div>

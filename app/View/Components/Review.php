@@ -16,10 +16,13 @@ class Review extends Component
 
     public $review;
 
-    public function __construct($username, $review)
+    public $image;
+
+    public function __construct($username, $review, $image)
     {
         $this->username = $username;
         $this->review = $review;
+        $this->image = $image;
     }
 
     /**

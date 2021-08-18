@@ -1,7 +1,7 @@
 <div style="margin-bottom: 2rem; margin-top: 2rem">
     <div class="card">
         <div class="row d-flex">
-            <div class=""> <img class="profile-pic" src="https://i.imgur.com/V3ICjlm.jpg"> </div>
+            <div class=""> <img class="profile-pic" src="{{route('image',['users',$image])}}"> </div>
             <div class="d-flex flex-column">
                 <h3 class="mt-2 mb-0">{{$username}}</h3>
                 <div>

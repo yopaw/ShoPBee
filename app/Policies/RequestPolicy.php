@@ -41,7 +41,8 @@ class RequestPolicy
      */
     public function create(User $user)
     {
-        //
+        $userRequest = $user->requests()->where('status_id',3)->first();
+        return $userRequest == null;
     }
 
     /**

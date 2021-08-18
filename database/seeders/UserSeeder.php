@@ -28,5 +28,19 @@ class UserSeeder extends Seeder
                 'role_id'=> 2
             ]);
         }
+        DB::table('users')->insert([
+            'username' => 'yopaw',
+            'email' => 'yopaw@gmail.com',
+            'password' => bcrypt('asd'),
+            'money' => rand(0,1000000),
+            'role_id'=> 2
+        ]);
+        DB::table('users')->insert([
+            'username' => 'yopawz',
+            'email' => 'yopawz@gmail.com',
+            'password' => bcrypt('asd'),
+            'money' => rand(0,1000000),
+            'role_id'=> 1
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Cart;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -39,9 +40,10 @@ class CartPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user, Product $product)
     {
-        //
+        if($user->seller == null) return true;
+        return $user->seller->id != $product->seller_id;
     }
 
     /**

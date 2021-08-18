@@ -12,16 +12,6 @@
            </div>
 
            <div class="form-group">
-               <label for="type">Product Type</label>
-               <select class="form-control" id="type" name="type">
-                   @foreach($types as $type)
-                       <option value="{{$type->name}}">{{$type->name}}</option>
-                   @endforeach
-               </select>
-               @error('type') <div class="text-danger">{{$message}}</div> @enderror
-           </div>
-
-           <div class="form-group">
                <label for="price">Product Price</label>
                <input type="number" class="form-control" id="price" name="price" placeholder="Product Price">
                @error('price') <div class="text-danger">{{$message}}</div> @enderror
@@ -38,7 +28,7 @@
                <input type="number" class="form-control" id="stock" name="stock" placeholder="Product Stock">
                @error('stock') <div class="text-danger">{{$message}}</div> @enderror
            </div>
-
+           <label for="image">Product Image</label>
            <div class="custom-file" style="margin-bottom: 1rem">
                <input type="file" class="custom-file-input" id="image" name="image"
                       onchange="let file = event.target.files[0];
@@ -53,7 +43,7 @@
                <label class="custom-file-label" for="image">Choose file...</label>
                @error('image') <div class="text-danger">{{$message}}</div> @enderror
            </div>
-           
+
            <div class="col-sm-3">
                <div class="w-100 my-3">
                    <img src="" alt="" class="img-fluid img-thumbnail" id="product-image">

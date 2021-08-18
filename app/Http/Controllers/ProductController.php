@@ -30,8 +30,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $types = ProductType::all();
-        return view('pages/products/create', compact('types'));
+        return view('pages/products/create');
     }
 
     /**
@@ -54,14 +53,12 @@ class ProductController extends Controller
         $user = auth()->user();
         $seller = $user->seller;
 
-        $productType = ProductType::where('name',$request->type)->first();
         $product = $seller->products()->create([
             'name' => $request->name,
             'price' => $request->price,
             'stock' => $request->stock,
             'description' => $request->description,
             'seller_id' => $seller->id,
-            'product_type_id' => $productType->id,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
             'updated_at' => null,
         ]);
@@ -73,7 +70,7 @@ class ProductController extends Controller
             $product->image = $path;
             $product->save();
         }
-        return back()->with('status', 'Insert Success');
+        return back();
     }
 
     /**
@@ -84,7 +81,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return view('pages/products/detail',compact('product'));
+        return view('pages/products/show',compact('product'));
     }
 
     /**
@@ -95,8 +92,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        $types = ProductType::all();
-        return view('pages.products.edit', compact('product', 'types'));
+        return view('pages.products.edit');
     }
 
     /**
@@ -121,6 +117,7 @@ class ProductController extends Controller
         $seller = $user->seller;
 
         $productType = ProductType::where('name',$request->type)->first();
+
         $product->update([
             'name' => $request->name,
             'price' => $request->price,
@@ -139,7 +136,7 @@ class ProductController extends Controller
             $product->save();
         }
 
-        return back()->with('status', 'Update Success');
+        return back();
     }
 
     /**

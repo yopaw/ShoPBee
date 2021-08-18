@@ -12,20 +12,6 @@
                 @error('name') <div class="text-danger">{{ $message }}</div>
             </div>
             <div class="form-group">
-                <label for="type">Product Type</label>
-                <select class="form-control" id="type" name="type">
-                    @foreach($types as $type)
-                        @if($type->name == $product->productType->name)
-                            <option selected value="{{$type->name}}">{{$type->name}}</option>
-                        @else
-                            <option value="{{$type->name}}">{{$type->name}}</option>
-                        @endif
-                    @endforeach
-                </select>
-                @error('type') <div class="text-danger">{{ $message }}</div>
-            </div>
-
-            <div class="form-group">
                 <label for="price">Product Price</label>
                 <input type="number" value="{{$product->price}}" class="form-control" id="price" name="price" placeholder="Product Price">
                 @error('price') <div class="text-danger">{{ $message }}</div>

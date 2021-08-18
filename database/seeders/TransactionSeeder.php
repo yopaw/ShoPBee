@@ -3,10 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Cart;
-use App\Models\Product;
-use App\Models\Seller;
 use App\Models\Transaction;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,15 +18,16 @@ class TransactionSeeder extends Seeder
     public function run()
     {
         $carts = Cart::all();
-
         foreach ($carts as $cart){
             $seller = $cart->seller;
             $date = Carbon::now()->format('Y-m-d H:i:s');
+            $vouchers = $seller->vouchers;
+            $randomVoucher = rand(0, count($vouchers)-1);
 
             DB::table('transactions')->insert([
                 'user_id' => $cart->user->id,
                 'seller_id' => $cart->seller->id,
-                'voucher_id' => $cart->voucher_id,
+                'voucher_id' => $vouchers[$randomVoucher]->id,
                 'date' => $date
             ]);
 

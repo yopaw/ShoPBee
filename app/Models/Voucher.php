@@ -9,6 +9,7 @@ class Voucher extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['name','stock','description','discount','minimum_price','maximum_price'];
     public function sellers(){
         return $this->belongsToMany(Seller::class);
     }

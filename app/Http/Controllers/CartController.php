@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Product;
+use App\Models\Seller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -34,9 +37,37 @@ class CartController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Product $product)
     {
-        //
+        $user = auth()->user();
+        $cart = $user->carts->where('seller_id',$product->seller->id)->first();
+        if($cart == null){
+            Cart::create([
+                'seller_id' => $product->seller->id,
+                'user_id' => $user->id
+            ]);
+            $lastCart = Cart::all()->last();
+            DB::table('cart_product')->insert([
+                'product_id' => $product->id,
+                'quantity' => 1,
+                'cart_id' => $lastCart->id
+            ]);
+            return back();
+        }
+        if($cart->products()->where('product_id',$product->id)->first() == null){
+            DB::table('cart_product')->insert([
+                'product_id' => $product->id,
+                'quantity' => 1,
+                'cart_id' => $cart->id
+            ]);
+            return back();
+        }
+
+        DB::table('cart_product')->update([
+           'quantity' =>  $cart->products()->where('product_id',$product->id)->first()->pivot->quantity+1
+        ]);
+
+        return back();
     }
 
     /**
@@ -80,8 +111,16 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Cart $cart,Product $product)
     {
-        //
+        DB::table('cart_product')->where([
+            ['product_id',$product->id],
+            ['cart_id',$cart->id]
+        ])->delete();
+        if($cart->products->count() == 0){
+            $cart->delete();
+            return redirect()->route('home');
+        }
+        return back();
     }
 }
