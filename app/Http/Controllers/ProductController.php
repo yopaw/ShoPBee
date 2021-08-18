@@ -92,7 +92,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('pages.products.edit');
+        return view('pages.products.edit', compact('product'));
     }
 
     /**
