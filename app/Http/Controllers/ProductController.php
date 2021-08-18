@@ -108,14 +108,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-//        Validator::make($request->all(),[
-//            'name' => 'required',
-//            'price' => 'required',
-//            'stock' => 'required',
-//            'description' => 'required',
-//            'type' => 'required',
-//            'image' => 'required'
-//        ])->validate();
+       Validator::make($request->all(),[
+           'name' => 'required',
+           'price' => 'required',
+           'stock' => 'required',
+           'description' => 'required',
+           'type' => 'required',
+           'image' => 'required'
+       ])->validate();
 
         $user = auth()->user();
         $seller = $user->seller;

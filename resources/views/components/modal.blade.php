@@ -37,7 +37,7 @@
                         </table>
                         <div class="form-group">
                             <label for="reason">Reason</label>
-                            <textarea class="form-control" id="reason" rows="3" name="reason" placeholder="Reason"></textarea>
+                            <textarea class="form-control" required id="reason" rows="3" name="reason" placeholder="Reason"></textarea>
                         </div>
                         <div class="form-group">
                             <input hidden type="text" class="form-control" id="id" name="id">

@@ -37,6 +37,11 @@ class ReviewController extends Controller
      */
     public function store(Request $request, Transaction $transaction)
     {
+        Validator::make($request->all(),[
+            'content' => 'required',
+            'rating' => 'required',
+        ])->validate();
+
         $user = auth()->user();
         $requestReview = $request->only('content', 'rating');
         $review = $transaction->review()->create([
@@ -85,6 +90,11 @@ class ReviewController extends Controller
      */
     public function update(Request $request, Review $review)
     {
+        Validator::make($request->all(),[
+            'content' => 'required',
+            'rating' => 'required',
+        ])->validate();
+        
         $requestReview = $request->only('content', 'rating');
         $review->update([
             'content' => $requestReview['content'],

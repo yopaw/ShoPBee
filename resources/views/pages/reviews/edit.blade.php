@@ -13,10 +13,12 @@
             <div class="form-group">
                 <label for="content">Content</label>
                 <textarea class="form-control" id="content" rows="3" name="content">{{$review->content}}</textarea>
+                @error('content') <div class="text-danger">{{$message}}</div>
             </div>
             <div class="form-group">
                 <label for="rating">Rating</label>
                 <input type="number" value="{{$review->rating}}" class="form-control" id="rating" name="rating" min="1" max="5" placeholder="rating">
+                @error('rating') <div class="text-danger">{{$message}}</div>
             </div>
             <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Submit</button>
         </form>

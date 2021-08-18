@@ -9,6 +9,7 @@
             <div class="form-group">
                 <label for="name">Product Name</label>
                 <input type="text" class="form-control" value="{{$product->name}}" id="name" name="name" placeholder="Product Name">
+                @error('name') <div class="text-danger">{{ $message }}</div>
             </div>
             <div class="form-group">
                 <label for="type">Product Type</label>
@@ -21,19 +22,27 @@
                         @endif
                     @endforeach
                 </select>
+                @error('type') <div class="text-danger">{{ $message }}</div>
             </div>
+
             <div class="form-group">
                 <label for="price">Product Price</label>
                 <input type="number" value="{{$product->price}}" class="form-control" id="price" name="price" placeholder="Product Price">
+                @error('price') <div class="text-danger">{{ $message }}</div>
             </div>
+
             <div class="form-group">
                 <label for="description">Product Description</label>
                 <textarea class="form-control" id="description" rows="3" name="description">{{$product->description}}</textarea>
+                @error('description') <div class="text-danger">{{ $message }}</div>
             </div>
+
             <div class="form-group">
                 <label for="stock">Product Stock</label>
                 <input type="number" value="{{$product->stock}}" class="form-control" id="stock" name="stock" placeholder="Product Stock">
+                @error('stock') <div class="text-danger">{{ $message }}</div>
             </div>
+
             <label for="image">Product Image</label>
             <div class="custom-file" style="margin-bottom: 1rem">
                 <input type="file" class="custom-file-input" id="image" name="image"
@@ -47,6 +56,7 @@
                                     })(file);
                                     reader.readAsDataURL(file);">
                 <label class="custom-file-label" for="image">Choose file...</label>
+                @error('image') <div class="text-danger">{{ $message }}</div>
             </div>
             <div class="form-group">
                 <div class="w-100 my-3">
