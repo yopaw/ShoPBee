@@ -34,6 +34,7 @@
                 <label for="stock">Product Stock</label>
                 <input type="number" value="{{$product->stock}}" class="form-control" id="stock" name="stock" placeholder="Product Stock">
             </div>
+            <label for="image">Product Image</label>
             <div class="custom-file" style="margin-bottom: 1rem">
                 <input type="file" class="custom-file-input" id="image" name="image"
                        onchange="let file = event.target.files[0];

@@ -9,6 +9,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{route('login')}}">Login <span class="sr-only">(current)</span></a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{route('login')}}">Register <span class="sr-only">(current)</span></a>
+                </li>
             @endif
             @if(request()->user() != null)
             <li class="nav-item">
@@ -26,26 +29,23 @@
             </li>
             @endif
             @if(request()->user() != null)
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Transactions
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{route('transactions.index','buyer')}}">Buyer Transactions</a>
-                        @if(request()->user()->seller != null)
-                            <a class="dropdown-item" href="{{route('transactions.index','seller')}}">Seller Transactions</a>
-                        @endif
-                    </div>
-                </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Transactions
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{route('transactions.index','buyer')}}">View Buyer Transactions</a>
+                            @if(request()->user()->seller != null)
+                                <a class="dropdown-item" href="{{route('transactions.index','seller')}}">View Seller Transactions</a>
+                            @endif
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{route('requests.index')}}">My Requests</a>
+                    </li>
             @endif
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('requests.index')}}">My Requests</a>
-                </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0" method="GET">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
         @if(auth()->user() != null)
             <form action="{{route('logout')}}" class="form-inline my-2 my-lg-0" method="POST">
                 @csrf
