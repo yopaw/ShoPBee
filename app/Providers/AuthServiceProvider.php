@@ -43,7 +43,7 @@ class AuthServiceProvider extends ServiceProvider
            return $user->seller != null;
         });
         Gate::define('isMember', function (User $user){
-           return $user->seller == null;
+           return $user->seller == null && $user->role->name == 'Member';
         });
         Gate::define('create-review', [ReviewPolicy::class,'create']);
         Gate::define('update-review', [ReviewPolicy::class, 'update']);
