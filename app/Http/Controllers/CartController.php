@@ -47,7 +47,8 @@ class CartController extends Controller
      */
     public function show(Cart $cart)
     {
-        return view('pages.carts.show', compact('cart'));
+        $vouchers = $cart->seller->vouchers;
+        return view('pages.carts.show', compact('cart', 'vouchers'));
     }
 
     /**

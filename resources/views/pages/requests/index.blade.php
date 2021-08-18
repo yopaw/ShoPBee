@@ -5,7 +5,6 @@
         <h2>Requests</h2>
             <div class="card" style="margin-bottom: 2rem">
                 <div class="card-body">
-{{--                    <h3 class="card-title">Transactions from {{$transaction->seller->name}}</h3>--}}
                     <table class="table table-hover">
                         <thead>
                         <tr>
@@ -30,6 +29,7 @@
                                 @elseif($request->status->name == "Pending")
                                     <td style="color: black">{{$request->status->name}}</td>
                                     <td>
+                                        @can('view',$request)
                                         <button type="button" class="btn btn-outline-success my-2 my-sm-0"
                                                 data-toggle="modal"
                                                 data-target="#requestModal"
@@ -39,6 +39,7 @@
                                                 data-id = "{{$request->id}}">
                                             Manage Request
                                         </button>
+                                        @endcan
                                     </td>
                                 @else
                                     <td style="color: red">{{$request->status->name}}</td>

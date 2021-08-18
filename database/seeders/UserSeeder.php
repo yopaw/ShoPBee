@@ -24,7 +24,8 @@ class UserSeeder extends Seeder
                 'username' => $username,
                 'email' => $email,
                 'password' => $password,
-                'money' => rand(0,1000000)
+                'money' => rand(0,1000000),
+                'role_id'=> 2
             ]);
         }
     }

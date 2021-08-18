@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,7 +26,6 @@ class ReviewController extends Controller
      */
     public function create(Transaction $transaction)
     {
-        if($transaction->review != null) return back();
         return view('pages/reviews/create', compact('transaction'));
     }
 
@@ -49,7 +49,9 @@ class ReviewController extends Controller
         $user = auth()->user();
 
         $transactions = Transaction::where('user_id',$user->id)->get();
-        return view('pages.transactions.index', compact('transactions'));
+        if($user->seller == null) $type = 'buyer';
+        else $type = 'seller';
+        return view('pages.transactions.index', compact('transactions','type'));
     }
 
     /**
@@ -69,9 +71,9 @@ class ReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Review $review)
     {
-        //
+        return view('pages.reviews.edit', compact('review'));
     }
 
     /**
@@ -81,9 +83,15 @@ class ReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Review $review)
     {
-        //
+        $requestReview = $request->only('content', 'rating');
+        $review->update([
+            'content' => $requestReview['content'],
+            'rating' => $requestReview['rating']
+        ]);
+        $review->save();
+        return back();
     }
 
     /**

@@ -23,8 +23,8 @@
             <h4 class="mt-3">{{$review->content}}</h4>
             @can('update', $review)
             <div class="ml-auto" style="">
-                <a href="">
-                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Manage this Review</button>
+                <a href="{{route('reviews.edit',$review)}}">
+                    <button class="btn btn-outline-success my-2 my-sm-0">Manage this Review</button>
                 </a>
             </div>
             @endcan

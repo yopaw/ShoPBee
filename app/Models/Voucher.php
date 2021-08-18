@@ -17,8 +17,8 @@ class Voucher extends Model
         return $this->hasMany(Transaction::class);
     }
 
-    public function getTotalVoucherUsed($id){
-//        return $this->transactions()
+    public function carts(){
+        return $this->hasMany(Cart::class);
     }
 
 }

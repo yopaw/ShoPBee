@@ -6,7 +6,11 @@
         @if($type == 'manage')
             <div style="display: flex; justify-content: space-between">
                 <a href="{{route('products.edit', $product)}}" class="btn btn-outline-success my-2 my-sm-0">Update</a>
-                <a href="{{route('products.destroy', $product)}}" class="btn btn-outline-danger my-2 my-sm-0">Delete</a>
+                <form action="{{route('products.destroy', $product)}}" method="POST">
+                    @method('DELETE')
+                    @csrf
+                    <button type="submit" class="btn btn-outline-danger my-2 my-sm-0">Delete</button>
+                </form>
             </div>
         @else
         <a href="{{route('products.show', $product)}}" class="btn btn-outline-success my-2 my-sm-0">See Details</a>

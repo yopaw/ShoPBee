@@ -4,63 +4,132 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 @endsection
 
+@section('script')
+    $(document).ready(function() {
+
+    /* Set rates */
+    var taxRate = 0.05;
+    var fadeTime = 300;
+
+    /* Assign actions */
+    $('.pass-quantity input').change(function() {
+    updateQuantity(this);
+    });
+
+    $('.remove-item button').click(function() {
+    removeItem(this);
+    });
+
+
+    /* Recalculate cart */
+    function recalculateCart() {
+    var subtotal = 0;
+
+    /* Sum up row totals */
+    $('.item').each(function() {
+    subtotal += parseFloat($(this).children('.product-line-price').text());
+    });
+
+    /* Calculate totals */
+    var tax = subtotal * taxRate;
+    var total = subtotal + tax;
+
+    /* Update totals display */
+    $('.totals-value').fadeOut(fadeTime, function() {
+    $('#cart-subtotal').html(subtotal.toFixed(2));
+    $('#cart-tax').html(tax.toFixed(2));
+    $('.cart-total').html(total.toFixed(2));
+    if (total == 0) {
+    $('.checkout').fadeOut(fadeTime);
+    } else {
+    $('.checkout').fadeIn(fadeTime);
+    }
+    $('.totals-value').fadeIn(fadeTime);
+    });
+    }
+
+
+    /* Update quantity */
+    function updateQuantity(quantityInput) {
+    /* Calculate line price */
+    var productRow = $(quantityInput).parent().parent();
+    var price = parseFloat(productRow.children('.product-price').text());
+    var quantity = $(quantityInput).val();
+    var linePrice = price * quantity;
+
+    /* Update line price display and recalc cart totals */
+    productRow.children('.product-line-price').each(function() {
+    $(this).fadeOut(fadeTime, function() {
+    $(this).text(linePrice.toFixed(2));
+    recalculateCart();
+    $(this).fadeIn(fadeTime);
+    });
+    });
+    }
+
+    /* Remove item from cart */
+    function removeItem(removeButton) {
+    /* Remove row from DOM and recalc cart total */
+    var productRow = $(removeButton).parent().parent();
+    productRow.slideUp(fadeTime, function() {
+    productRow.remove();
+    recalculateCart();
+    });
+    }
+
+    });
+@endsection
 @section('content')
-    <section class="shopping-cart dark">
-        <div class="container">
-            <div class="block-heading">
-                <h2>Shopping Cart</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.</p>
-            </div>
-            <div class="content">
-                <div class="row">
-                    <div class="col-md-12 col-lg-8">
-                        <div class="items">
-                            @foreach($cart->products as $product)
-                                <div class="product">
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <img class="img-fluid mx-auto d-block image" src="{{route('image', $product->image)}}">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="info">
-                                                <div class="row">
-                                                    <div class="col-md-5 product-name">
-                                                        <div class="product-name">
-                                                            <a href="#">{{$product->name}}</a>
-                                                            <div class="product-info">
-                                                                <div>Display: <span class="value">5 inch</span></div>
-                                                                <div>RAM: <span class="value">4GB</span></div>
-                                                                <div>Memory: <span class="value">32GB</span></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4 quantity">
-                                                        <label for="quantity">Quantity:</label>
-                                                        <input id="quantity" type="number" value ="{{$product->pivot->quantity}}" class="form-control quantity-input">
-                                                    </div>
-                                                    <div class="col-md-3 price">
-                                                        <span>$120</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="col-md-12 col-lg-4">
-                        <div class="summary">
-                            <h3>Summary</h3>
-                            <div class="summary-item"><span class="text">Subtotal</span><span class="price">$360</span></div>
-                            <div class="summary-item"><span class="text">Discount</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Shipping</span><span class="price">$0</span></div>
-                            <div class="summary-item"><span class="text">Total</span><span class="price">$360</span></div>
-                            <button type="button" class="btn btn-primary btn-lg btn-block">Checkout</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+       <div class="container mt-5 mb-5 card" style="padding: 1rem;">
+           <div class="row justify-content-center">
+               <div class="col-xl-12 col-lg-11 col-md-10">
+                   <div class="">
+                       <h2 class="text-uppercase">My Carts</h2>
+                   </div>
+                   <div class="border border-gainsboro p-3">
+                       <h2 class="h6 text-uppercase mb-0">Cart Total ({{$cart->products->count()}} Items): <strong class="cart-total">Rp. {{$cart->getTotalPrice($cart->id)}}</strong></h2>
+                   </div>
+                  @foreach($cart->products as $product)
+                       <div class="border border-gainsboro p-3 mt-3 clearfix item">
+                           <div class="text-lg-left">
+                               <img width="100px" src="{{route('image',$product->image)}}" alt="">
+                           </div>
+                           <div class="col-lg-5 col-5 text-lg-left">
+                               <h3 class="h6 mb-0">{{$product->name}}<br>
+                                   <small>Cost: Rp.{{$product->price}}</small>
+                               </h3>
+                           </div>
+                           <div class="product-price d-none">50</div>
+                           <div class="pass-quantity col-lg-3 col-md-4 col-sm-3">
+                               <label for="pass-quantity" class="pass-quantity">Quantity</label>
+                               <input class="form-control" type="number" value="{{$product->pivot->quantity}}" min="1">
+                           </div>
+                           <div class="col-lg-2 col-md-1 col-sm-2 product-line-price pt-4">
+                            <span class="product-line-price">Rp.{{$product->price}}
+                        </span>
+                           </div>
+                           <div class="remove-item pt-4">
+                               <button class="btn btn-outline-danger my-2 my-sm-0"
+                                       type="button">Delete</button>
+                               </button>
+                           </div>
+                       </div>
+                   @endforeach
+                   <div class="form-group"  style="margin-top: 1rem">
+                       <h2>Voucher</h2>
+                       <select class="form-control" id="voucher" name="voucher">
+                           @foreach($vouchers as $voucher)
+                               <option value="{{$voucher->name}}">{{$voucher->name}}</option>
+                           @endforeach
+                       </select>
+                   </div>
+                   <form action="{{route('transactions.store',$cart)}}" method="POST">
+                       @csrf
+                       <div>
+                           <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Order Summary</button>
+                       </div>
+                   </form>
+               </div>
+           </div>
+       </div>
 @endsection

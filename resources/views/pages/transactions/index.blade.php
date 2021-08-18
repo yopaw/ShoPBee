@@ -12,14 +12,12 @@
                         @else
                             <h3 class="card-title">Transactions from {{$transaction->user->username}}</h3>
                         @endif
-                        @if((strtotime(\Carbon\Carbon::now()) - strtotime($transaction->date)) / (60 * 60 * 24) < 3
-                            && $transaction->review == null)
-                                @can('create-review', $transaction)
-                                    <a href="{{route('reviews.create',$transaction)}}">
-                                        <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Leave a Review</button>
-                                    </a>
-                                @endcan
-                        @endif
+                            @can('create-review', $transaction)
+                                <a href="{{route('reviews.create',$transaction)}}">
+                                    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Leave a Review
+                                    </button>
+                                </a>
+                            @endcan
                     </div>
                     <h4 class="card-title">Transaction Date: {{$transaction->date}}</h4>
                     <table class="table table-hover">
@@ -32,7 +30,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($transaction->products as $product)
+                        @foreach($transaction->products()->withTrashed()->get() as $product)
                             <tr>
                                 <th scope="row">{{$loop->index+1}}</th>
                                 <td>{{$product->name}}</td>

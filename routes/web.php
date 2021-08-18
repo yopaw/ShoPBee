@@ -28,10 +28,14 @@ Route::post('/logout', [\App\Http\Controllers\Auth\LoginController::class, 'logo
 Route::get('/vouchers', [VoucherController::class,'index']);
 Route::get('/vouchers/create', [VoucherController::class, 'create']);
 
-Route::get('/requests',[RequestController::class,'index']);
-Route::get('/requests/create', [RequestController::class,'create']);
-Route::post('/requests/store/{user}', [RequestController::class,'store'])->name('requests.store');
-Route::put('/requests/edit',[RequestController::class,'update'])->name('requests.update');
+Route::middleware([Authenticate::class])->prefix('requests')->name('requests.')->group(function(){
+    Route::get('/',[RequestController::class,'index'])->name('index');
+    Route::get('/create', [RequestController::class,'create'])->name('create');
+    Route::post('/store/{user}', [RequestController::class,'store'])->name('store');
+    Route::put('/edit',[RequestController::class,'update'])->name('update');
+});
+
+
 
 Route::get('storage/{filename}', function ($filename)
 {
@@ -55,26 +59,27 @@ Route::middleware([Authenticate::class,ValidateSeller::class])->prefix('products
     Route::post('/store',[ProductController::class, 'store'])->name('store');
     Route::get('/edit/{product}', [ProductController::class, 'edit'])->name('edit')->middleware('can:manage-product,product');
     Route::put('/update/{product}', [ProductController::class, 'update'])->name('update')->middleware('can:manage-product,product');
-    Route::put('/destroy/{product}', [ProductController::class, 'destroy'])->name('destroy')->middleware('can:manage-product,product');
+    Route::delete('/destroy/{product}', [ProductController::class, 'destroy'])->name('destroy')->middleware('can:manage-product,product');
     Route::get('/manage', [ProductController::class, 'manage'])->name('manage');
     Route::get('/view', [ProductController::class, 'view'])->name('view');
 });
 
 Route::middleware([Authenticate::class])->prefix('reviews')->name('reviews.')->group(function(){
-    Route::get('/create/{transaction}', [ReviewController::class, 'create'])->name('create');
-    Route::post('/store/{transaction}', [ReviewController::class, 'store'])->name('store');
+    Route::get('/create/{transaction}', [ReviewController::class, 'create'])->name('create')->middleware('can:create-review,transaction');
+    Route::post('/store/{transaction}', [ReviewController::class, 'store'])->name('store')->middleware('can:create-review,transaction');
+    Route::get('/edit/{review}', [ReviewController::class, 'edit'])->name('edit')->middleware('can:update-review,review');
+    Route::put('/edit/{review}', [ReviewController::class, 'update'])->name('update')->middleware('can:update-review,review');;
 });
 
 Route::middleware([Authenticate::class])->prefix('transactions')->name('transactions.')->group(function(){
     Route::get('/{type}',[TransactionController::class, 'index'])->name('index');
+    Route::post('/store/{cart}', [TransactionController::class, 'store'])->name('store');
 });
 
 Route::middleware([Authenticate::class])->prefix('carts')->name('carts.')->group(function(){
     Route::get('/', [CartController::class, 'index'])->name('index');
-    Route::get('/{cart}', [CartController::class, 'show'])->name('show');
+    Route::get('/{cart}', [CartController::class, 'show'])->name('show')->middleware('can:view-cart,cart');
 });
 
 Route::get('/detail/{product}', [ProductController::class,'show'])->name('products.show');
 
-
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

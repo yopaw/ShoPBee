@@ -2,12 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Review;
-use App\Models\Transaction;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ReviewPolicy
+class ProductPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +25,10 @@ class ReviewPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Review $review)
+    public function view(User $user, Product $product)
     {
         //
     }
@@ -40,44 +39,43 @@ class ReviewPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user, Transaction $transaction)
+    public function create(User $user)
     {
-        return $user->id == $transaction->user_id && ((strtotime(\Carbon\Carbon::now()) - strtotime($transaction->date)) / (60 * 60 * 24) < 3
-            && $transaction->review == null);
+        return $user->seller != null;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Review $review)
+    public function update(User $user, Product $product)
     {
-        return $user->id == $review->user_id;
+        return $user->seller->id == $product->seller_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Review $review)
+    public function delete(User $user, Product $product)
     {
-        //
+        return $user->seller->id == $product->seller_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Review $review)
+    public function restore(User $user, Product $product)
     {
         //
     }
@@ -86,10 +84,10 @@ class ReviewPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Product  $product
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Review $review)
+    public function forceDelete(User $user, Product $product)
     {
         //
     }

@@ -47,7 +47,7 @@
                    <img src="" alt="" class="img-fluid img-thumbnail" id="product-image">
                </div>
            </div>
-           <button type="submit" class="btn btn-primary">Submit</button>
+           <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Submit</button>
        </form>
    </div>
 @endsection

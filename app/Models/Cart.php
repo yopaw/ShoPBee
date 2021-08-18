@@ -18,6 +18,10 @@ class Cart extends Model
         return $this->belongsTo(Seller::class);
     }
 
+    public function voucher(){
+        return $this->belongsTo(Voucher::class);
+    }
+
     public function products(){
         return $this->belongsToMany(Product::class)->withPivot('quantity');
     }

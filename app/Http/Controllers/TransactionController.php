@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\HeaderTransaction;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -41,9 +44,35 @@ class TransactionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Cart $cart)
     {
-        //
+        $user = auth()->user();
+        $transaction = $user->transactions()->create([
+            'user_id' => $cart->user->id,
+            'seller_id' => $cart->seller->id,
+            'voucher_id' => $cart->voucher->id,
+            'date' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        $transaction->save();
+
+        $lastTransaction = Transaction::all()->last();
+
+        foreach ($cart->products as $product){
+            DB::table('product_transaction')->insert([
+                'product_id' => $product->id,
+                'transaction_id' => $lastTransaction->id,
+                'quantity' => $product->pivot->quantity
+            ]);
+
+            $product->update([
+               'stock' => $product->stock - $product->pivot->quantity
+            ]);
+
+            $product->save();
+        }
+
+        return redirect()->route('home');
     }
 
     /**
