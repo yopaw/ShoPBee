@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use App\Models\Transaction;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ReviewController extends Controller
 {
@@ -94,7 +94,7 @@ class ReviewController extends Controller
             'content' => 'required',
             'rating' => 'required',
         ])->validate();
-        
+
         $requestReview = $request->only('content', 'rating');
         $review->update([
             'content' => $requestReview['content'],
