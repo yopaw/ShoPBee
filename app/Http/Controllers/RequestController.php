@@ -33,7 +33,6 @@ class RequestController extends Controller
     public function create()
     {
         $user = auth()->user();
-        if($user == null) $user = User::find(1);
         return view('pages/requests/create', compact('user'));
     }
 
@@ -46,7 +45,6 @@ class RequestController extends Controller
     public function store(Request $request)
     {
         $user = auth()->user();
-        if($user == null) $user = User::find(1);
         $request = $request->all();
         $apply = $user->requests()->create([
             'user_id' => $user->id,
@@ -91,9 +89,8 @@ class RequestController extends Controller
         $req = $request->only('reason', 'status_id');
         $requestModel = \App\Models\Request::find($request->all()['id']);
         if($request->status_id == 3){
-            $user = auth()->user();
             Seller::create([
-                'user_id' => $user->id,
+                'user_id' => $requestModel->user->id,
                 'name' => $requestModel->seller_name
             ]);
         }
