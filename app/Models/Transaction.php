@@ -35,7 +35,7 @@ class Transaction extends Model
     public function getTotalPrice($id){
         return DB::table('product_transaction')
             ->join('products', 'product_transaction.product_id','=','products.id')
-            ->where('product_   transaction.transaction_id','=',$id)
+            ->where('product_transaction.transaction_id','=',$id)
             ->sum(DB::raw('products.price * product_transaction.quantity'));
     }
 }

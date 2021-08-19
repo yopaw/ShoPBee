@@ -21,11 +21,15 @@ class TransactionController extends Controller
     {
         $user = auth()->user();
 
-        if($type == 'buyer') $transactions = Transaction::where('user_id',$user->id)->get();
+        
+        if($type == 'buyer') {
+            $transactions = Transaction::where('user_id',$user->id)->get();
+        }
         else{
             $seller = auth()->user()->seller;
             $transactions = Transaction::where('seller_id',$seller->id)->get();
         }
+        // dd($transactions);
         return view('pages/transactions/index', compact('transactions','type'));
     }
 
