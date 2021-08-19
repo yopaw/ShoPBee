@@ -46,7 +46,6 @@ class ProductController extends Controller
             'price' => 'required',
             'stock' => 'required',
             'description' => 'required',
-            'type' => 'required',
             'image' => 'required'
         ])->validate();
 

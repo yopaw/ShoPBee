@@ -18,6 +18,7 @@ class ValidateSeller
      */
     public function handle(Request $request, Closure $next)
     {
+        //TODO VALIDATE USER ROLE IS SELLER
         $seller = $request->user()->seller;
         if($seller == null) return back();
         return $next($request);

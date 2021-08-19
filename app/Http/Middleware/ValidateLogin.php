@@ -16,6 +16,7 @@ class ValidateLogin
      */
     public function handle(Request $request, Closure $next)
     {
+        //TODO VALIDATE USER ROLE IS ALREADY LOGIN
         if($request->user() != null) return redirect()->route('home');
         return $next($request);
     }

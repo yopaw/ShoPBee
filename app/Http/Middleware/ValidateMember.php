@@ -16,6 +16,7 @@ class ValidateMember
      */
     public function handle(Request $request, Closure $next)
     {
+        //TODO VALIDATE USER ROLE IS ADMIN
         $user = $request->user();
         if($user->role->name != 'Member') return redirect()->route('home');
         return $next($request);
