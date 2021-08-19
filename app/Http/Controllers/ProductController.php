@@ -20,7 +20,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view('pages/home', compact('products'));
+        $user = auth()->user();
+        return view('pages/home', compact('products', 'user'));
     }
 
     /**

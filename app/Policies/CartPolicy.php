@@ -42,6 +42,8 @@ class CartPolicy
      */
     public function create(User $user, Product $product)
     {
+        // dd($user->role_id);
+        if ($user->role_id == 1) return false;
         if($user->seller == null) return true;
         return $user->seller->id != $product->seller_id;
     }
